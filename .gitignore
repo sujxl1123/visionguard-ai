@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+input.mp4
+attendance_results.json
+live_attendance.json
+attendance.csv
+service_requests.json
+dataset/
