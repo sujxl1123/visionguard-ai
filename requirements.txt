@@ -1,6 +1,6 @@
-streamlit
-pandas
-numpy
-opencv-python
-plotly
-deepface
+streamlit>=1.28.0
+pandas>=2.0.0
+numpy>=1.24.0
+opencv-python-headless>=4.8.0
+plotly>=5.17.0
+deepface>=0.0.79
