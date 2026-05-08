@@ -1,0 +1,258 @@
+cat > index.html << 'ENDOFFILE'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionGuard AI | Enterprise Attendance Intelligence</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #050810; 
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* ── Sticky Nav ── */
+        nav {
+            position: fixed; top:0; width:100%; z-index:1000;
+            background: rgba(5,8,16,0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1rem 3rem; display:flex; justify-content:space-between; align-items:center;
+            transition: all 0.3s ease;
+        }
+        nav.scrolled { padding: 0.6rem 3rem; background: rgba(5,8,16,0.95); }
+        .nav-logo { font-size:1.4rem; font-weight:800; color:#818cf8; letter-spacing:-0.5px; }
+        .nav-links { display:flex; gap:2rem; align-items:center; }
+        .nav-links a { color:#94a3b8; text-decoration:none; font-weight:500; font-size:0.9rem; transition:color 0.2s; }
+        .nav-links a:hover { color:white; }
+        .btn-primary { 
+            background: linear-gradient(135deg, #6366f1, #4f46e5); color:white; 
+            padding: 0.7rem 1.6rem; border-radius: 10px; font-weight:600; border:none; 
+            cursor:pointer; transition: all 0.3s; text-decoration:none; font-size:0.9rem;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(99,102,241,0.4); }
+
+        /* ── Hero Section ── */
+        .hero {
+            min-height:100vh; display:flex; align-items:center; justify-content:center;
+            text-align:center; padding: 6rem 2rem 4rem;
+            background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 60%);
+            position: relative; overflow:hidden;
+        }
+        .hero-content { position:relative; z-index:2; max-width: 800px; }
+        .hero h1 { font-size:4.5rem; font-weight:900; letter-spacing:-1.5px; line-height:1.1; 
+                   background: linear-gradient(135deg, #e2e8f0 0%, #818cf8 50%, #6366f1 100%);
+                   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+                   animation: fadeInUp 1s ease; }
+        .hero p { font-size:1.3rem; color:#94a3b8; margin:1.5rem 0 2rem; animation: fadeInUp 1s ease 0.2s both; }
+        .hero .hero-buttons { display:flex; gap:1rem; justify-content:center; animation: fadeInUp 1s ease 0.4s both; }
+        .btn-outline { 
+            border: 1px solid rgba(255,255,255,0.2); color:white; 
+            padding: 0.7rem 1.6rem; border-radius: 10px; font-weight:600; 
+            text-decoration:none; transition: all 0.3s; font-size:0.9rem;
+        }
+        .btn-outline:hover { border-color: #6366f1; background: rgba(99,102,241,0.1); }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
+            animation: float 8s ease-in-out infinite; pointer-events:none;
+        }
+        .orb-1 { width:400px; height:400px; background:#6366f1; top:10%; left:-10%; animation-delay:0s; }
+        .orb-2 { width:300px; height:300px; background:#8b5cf6; bottom:10%; right:-5%; animation-delay:-4s; }
+        .orb-3 { width:200px; height:200px; background:#10b981; top:50%; right:20%; animation-delay:-2s; }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity:0; transform:translateY(30px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── Sections ── */
+        section { padding: 6rem 3rem; max-width:1200px; margin:0 auto; }
+        .section-title { text-align:center; margin-bottom:4rem; }
+        .section-title h2 { font-size:2.8rem; font-weight:800; letter-spacing:-0.5px; margin-bottom:1rem; }
+        .section-title p { color:#94a3b8; font-size:1.1rem; max-width:600px; margin:0 auto; }
+
+        /* ── Feature Cards ── */
+        .features-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:1.5rem; }
+        .feature-card {
+            background: rgba(15,22,40,0.7); border:1px solid rgba(255,255,255,0.06);
+            border-radius:16px; padding:2rem; transition: all 0.3s;
+            opacity:0; transform:translateY(40px);
+        }
+        .feature-card.visible { opacity:1; transform:translateY(0); transition: all 0.6s cubic-bezier(0.22,1,0.36,1); }
+        .feature-card:hover { border-color: rgba(99,102,241,0.4); transform:translateY(-4px); }
+        .feature-icon { width:48px; height:48px; background: rgba(99,102,241,0.15); border-radius:12px; 
+                        display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:1rem; }
+        .feature-card h3 { font-size:1.2rem; font-weight:700; margin-bottom:0.5rem; }
+        .feature-card p { color:#94a3b8; font-size:0.9rem; line-height:1.6; }
+
+        /* ── Stats Section ── */
+        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; text-align:center; }
+        .stat-item { opacity:0; transform:translateY(30px); }
+        .stat-item.visible { opacity:1; transform:translateY(0); transition: all 0.6s cubic-bezier(0.22,1,0.36,1); }
+        .stat-number { font-size:3rem; font-weight:900; color:#818cf8; }
+        .stat-label { color:#94a3b8; font-size:0.9rem; margin-top:0.3rem; }
+
+        /* ── CTA Section ── */
+        .cta-section {
+            text-align:center; padding:8rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(99,102,241,0.1) 0%, transparent 60%);
+        }
+        .cta-section h2 { font-size:3rem; font-weight:800; margin-bottom:1rem; }
+
+        /* ── Footer ── */
+        footer { text-align:center; padding:2rem; color:#475569; font-size:0.85rem; border-top:1px solid rgba(255,255,255,0.06); }
+
+        /* ── Scroll Animation ── */
+        .reveal { opacity:0; transform:translateY(40px); transition: all 0.8s cubic-bezier(0.22,1,0.36,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        @media (max-width:768px) {
+            .hero h1 { font-size:2.5rem; }
+            .features-grid, .stats-grid { grid-template-columns:1fr; }
+            nav { padding:1rem; }
+            .nav-links { display:none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="navbar">
+    <div class="nav-logo">🛡 VisionGuard AI</div>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#stats">Stats</a>
+        <a href="#cta">Pricing</a>
+        <a href="http://localhost:8501" class="btn-primary">🚀 Dashboard Demo</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-content">
+        <h1>Attendance That Works<br>While You Teach</h1>
+        <p>Face recognition powered by AI. No queues, no cards, no proxy. Just walk in and get marked.</p>
+        <div class="hero-buttons">
+            <a href="http://localhost:8501" class="btn-primary">🚀 Try Live Demo</a>
+            <a href="#features" class="btn-outline">See Features</a>
+        </div>
+    </div>
+</section>
+
+<section id="features">
+    <div class="section-title">
+        <h2>Enterprise Attendance<br>Reimagined</h2>
+        <p>Everything you need to manage attendance at scale, powered by cutting-edge AI.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card reveal">
+            <div class="feature-icon">🤖</div>
+            <h3>AI Face Recognition</h3>
+            <p>DeepFace neural network identifies students with 99% accuracy. No special hardware needed.</p>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">⚡</div>
+            <h3>Real-Time Processing</h3>
+            <p>Process an entire classroom in under 2 minutes. Live camera mode for instant attendance.</p>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">📊</div>
+            <h3>Smart Analytics</h3>
+            <p>Auto-generated reports, risk predictions, and AI insights for data-driven decisions.</p>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🔐</div>
+            <h3>Enterprise Security</h3>
+            <p>Multi-role access, audit logs, encrypted data, and session timeouts for complete security.</p>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🏛️</div>
+            <h3>Student Service Hub</h3>
+            <p>Bonafide certificates, transcripts, ID cards — apply online. No more office queues.</p>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🌐</div>
+            <h3>Multi-College Support</h3>
+            <p>One platform for unlimited colleges. White-label ready with custom branding.</p>
+        </div>
+    </div>
+</section>
+
+<section id="stats">
+    <div class="section-title">
+        <h2>Trusted by Institutions</h2>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item reveal">
+            <div class="stat-number">76+</div>
+            <div class="stat-label">Students Managed per Class</div>
+        </div>
+        <div class="stat-item reveal">
+            <div class="stat-number">99%</div>
+            <div class="stat-label">Face Recognition Accuracy</div>
+        </div>
+        <div class="stat-item reveal">
+            <div class="stat-number">85%</div>
+            <div class="stat-label">Time Saved vs Manual</div>
+        </div>
+        <div class="stat-item reveal">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Availability</div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section" id="cta">
+    <h2>Ready to Transform Attendance?</h2>
+    <p style="color:#94a3b8; font-size:1.1rem; margin-bottom:2rem;">Start your free trial. No credit card required.</p>
+    <a href="http://localhost:8501" class="btn-primary" style="font-size:1.1rem; padding:1rem 2.5rem;">🚀 Launch Dashboard</a>
+</section>
+
+<footer>
+    © 2026 VisionGuard AI &nbsp;|&nbsp; Developed by Sujal Ganesh Kamathe & Saniya Rahul Dhawade &nbsp;|&nbsp; MIT World Peace University, Pune
+</footer>
+
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.reveal, .feature-card, .stat-item').forEach(el => observer.observe(el));
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Smooth parallax for orbs
+window.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    document.querySelectorAll('.orb').forEach(orb => {
+        orb.style.transform = `translate(${x}px, ${y}px)`;
+    });
+});
+</script>
+
+</body>
+</html>
+ENDOFFILE
+
+echo "✅ Marketing website created!"

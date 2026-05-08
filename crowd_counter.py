@@ -8,7 +8,7 @@ class CrowdCounter:
         self.total_count = 0
         
     def count_people(self, frame):
-        # LOWER confidence to catch more people
+        # Lower confidence to detect more people
         results = self.model(frame, classes=[0], verbose=False, conf=0.15)
         count = 0
         boxes = None
